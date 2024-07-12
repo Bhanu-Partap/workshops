@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
-import "@openzeppelin/contracts/metatx/ERC2771Forwarder.sol";
+import "@openzeppelin/contracts/metatx/ERC2771Forwarder.sol"; 
 
-contract Registry is ERC2771Context {  
+contract Registry is ERC2771Context {
   event Registered(address indexed who, string name);
 
   mapping(address => string) public names;

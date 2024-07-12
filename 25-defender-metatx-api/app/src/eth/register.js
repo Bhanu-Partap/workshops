@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { ethers, toBigInt } from 'ethers';
 import { createInstance } from './forwarder';
 import { signMetaTxRequest } from './signer';
 
@@ -33,14 +33,18 @@ export async function registerName(registry, provider, name) {
   await window.ethereum.enable();
   const userProvider = new ethers.BrowserProvider(window.ethereum);
   const userNetwork = await userProvider.getNetwork();
-  console.log(userNetwork)
-  if (userNetwork.chainId !== 11155111) throw new Error(`Please switch to Sepolia for signing`);
+  console.log(Number(userNetwork.chainId) ,"chainid is here")
+
+  if (Number(userNetwork.chainId) !== 11155111) throw new Error(`Please switch to Sepolia for signing`);
 
   const signer = userProvider.getSigner();
-  const from = await signer.getAddress();
+  const from = (await signer).address;
   const balance = await provider.getBalance(from);
-  
-  const canSendTx = balance.gt(1e15);
-  if (canSendTx) return sendTx(registry.connect(signer), name);
+  const bigBalance = toBigInt(balance)
+  const threshold = toBigInt(1e15)
+
+  const canSendTx = bigBalance*threshold;
+  const registryWithSigner = registry.connect(signer.address);
+  if (canSendTx) return sendTx(registryWithSigner, name);
   else return sendMetaTx(registry, provider, signer, name);
 }
