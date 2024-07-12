@@ -1,3 +1,4 @@
+// require("dotenv").config()
 const { handler } = require('../action/')
 
 // Run autotask code locally using the Relayer API key and secret

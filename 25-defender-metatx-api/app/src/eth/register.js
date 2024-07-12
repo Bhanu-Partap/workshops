@@ -44,7 +44,8 @@ export async function registerName(registry, provider, name) {
   const threshold = toBigInt(1e15)
 
   const canSendTx = bigBalance*threshold;
-  const registryWithSigner = registry.connect(signer.address);
+  console.log((await signer).address);
+  const registryWithSigner = await registry.connect((await signer).address);
   if (canSendTx) return sendTx(registryWithSigner, name);
   else return sendMetaTx(registry, provider, signer, name);
 }
