@@ -1,4 +1,4 @@
-import { ethers, toBigInt } from 'ethers';
+import { ethers } from 'ethers';
 import { createInstance } from './forwarder';
 import { signMetaTxRequest } from './signer';
 
@@ -40,10 +40,10 @@ export async function registerName(registry, provider, name) {
   const signer = userProvider.getSigner();
   const from = (await signer).address;
   const balance = await provider.getBalance(from);
-  const bigBalance = toBigInt(balance)
-  const threshold = toBigInt(1e15)
+  // const bigBalance = toBigInt(balance)
+  // const threshold = toBigInt(1e15)
 
-  const canSendTx = bigBalance*threshold;
+  const canSendTx = balance.gt(1e15);
   console.log((await signer).address);
   const registryWithSigner = await registry.connect((await signer).address);
   if (canSendTx) return sendTx(registryWithSigner, name);
